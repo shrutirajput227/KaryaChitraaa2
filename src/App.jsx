@@ -9,8 +9,8 @@ import {Support} from "./Support.jsx";
 import {Login} from "./Login.jsx";
 import {Register} from "./Register.jsx";
 import {HomePage} from "./HomePage.jsx";
-import {ProtectedRoute} from "./components/ProtectedRoute";
 import { Dashboard } from "./Dashboard.jsx";
+import { FreelancerChat } from "./FreelancerChat.jsx";
 
 function App() {  
 
@@ -26,17 +26,8 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
-        <Route
-          path="/dashboard"
-          element={
-            <ProtectedRoute>
-              <Dashboard />
-            </ProtectedRoute>
-          }
-        />
-        <Route path="*" element={<Login />} />
-
-    
+        <Route path="/ClientDashboard" element={<Dashboard />} />
+        <Route path="/freelancerChat" element={<FreelancerChat />} />
       </Routes>
       
     </BrowserRouter>

@@ -1,83 +1,119 @@
 import React, { useState } from "react";
+import { ToastContainer } from "react-toastify";
+import { handleError, handleSuccess } from "./utils";
+import { useNavigate } from "react-router-dom";
 
 export const Login = () => {
-  const [role, setRole] = useState("client");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [loginInfo, setLoginInfo] = useState({
+    email: "",
+    password: "",
+  });
 
-  const handleSubmit = (e) => {
+  const navigate = useNavigate();
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setLoginInfo({ ...loginInfo, [name]: value });
+  };
+
+  const handleLogin = async (e) => {
     e.preventDefault();
-    alert(`Logging in as ${role}\nEmail: ${email}\nPassword: ${password}`);
+    const { email, password } = loginInfo;
+
+    if (!email || !password) {
+      return handleError("Please fill all the fields");
+    }
+
+    try {
+      const url = "http://localhost:5000/api/auth/login";
+      const response = await fetch(url, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(loginInfo),
+      });
+
+      const result = await response.json();
+
+      if (response.ok) {
+        const { token, name, role } = result;
+
+
+        localStorage.setItem("Token", token);
+        localStorage.setItem("loggedInUser", name);
+        localStorage.setItem("role", role);
+
+        handleSuccess("Logged in successfully!");
+
+        setTimeout(() => {
+          if (role === "Client") {
+            navigate("/clientDashboard");
+          } else if (role === "Freelancer") {
+            navigate("/");
+          } else {
+            navigate("/freelancer-dashboard");
+          }
+        }, 1000);
+      } else {
+        handleError(result.message || "Login failed");
+      }
+    } catch (err) {
+      handleError(err.message || "Server error");
+    }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <form
-        onSubmit={handleSubmit}
-        className="bg-white p-8 rounded-md shadow-md w-96"
-      >
-        <h2 className="text-2xl font-bold mb-6 text-center">Login</h2>
+    <div className="flex items-center justify-center min-h-screen bg-gray-100 px-4 sm:px-6 md:px-12">
+      <div className="w-full max-w-md bg-white rounded-2xl shadow-lg p-6 sm:p-8 md:p-10">
+        <h2 className="text-2xl sm:text-3xl font-bold text-center text-gray-800 mb-6">
+          Login to Your Account
+        </h2>
 
-        <div className="flex justify-center mb-6 space-x-4">
+        <form className="space-y-5" onSubmit={handleLogin}>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Email
+            </label>
+            <input
+              type="email"
+              name="email"
+              placeholder="Enter your email"
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:outline-none"
+              value={loginInfo.email}
+              onChange={handleChange}
+              autoFocus
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Password
+            </label>
+            <input
+              type="password"
+              name="password"
+              placeholder="Enter your password"
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:outline-none"
+              value={loginInfo.password}
+              onChange={handleChange}
+            />
+          </div>
+
           <button
-            type="button"
-            onClick={() => setRole("client")}
-            className={`
-              px-4 py-2 rounded-md font-semibold
-              transition transform duration-150
-              ${
-                role === "client"
-                  ? "bg-orange-500 text-white shadow-lg translate-y-0"
-                  : "bg-gray-200 text-gray-700 shadow-md hover:translate-y-[-2px] hover:shadow-lg"
-              }
-            `}
+            type="submit"
+            className="w-full bg-black text-white py-2 rounded-full hover:bg-gray-800 transition"
           >
-            Client
+            Log In
           </button>
-          <button
-            type="button"
-            onClick={() => setRole("freelancer")}
-            className={`
-              px-4 py-2 rounded-md font-semibold
-              transition transform duration-150
-              ${
-                role === "freelancer"
-                  ? "bg-orange-500 text-white shadow-lg translate-y-0"
-                  : "bg-gray-200 text-gray-700 shadow-md hover:translate-y-[-2px] hover:shadow-lg"
-              }
-            `}
-          >
-            Freelancer
-          </button>
-        </div>
+        </form>
 
-        <input
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          className="w-full px-4 py-2 mb-4 border rounded-md focus:outline-none focus:ring-2 focus:ring-orange-400"
-        />
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          className="w-full px-4 py-2 mb-6 border rounded-md focus:outline-none focus:ring-2 focus:ring-orange-400"
-        />
-
-        <button
-          type="submit"
-          className="w-full bg-orange-500 text-white py-2 rounded-md hover:bg-orange-600 shadow-md hover:shadow-lg transition transform hover:-translate-y-1"
-        >
-          Login as {role.charAt(0).toUpperCase() + role.slice(1)}
-        </button>
-         <p class="text-sm text-gray-400 mt-4 text-center">
-         Don't have an account?
-         <a href="/register" class="text-orange-400 hover:underline">Sign Up</a>
+        <p className="text-center text-sm text-gray-600 mt-6">
+          Don't have an account?{" "}
+          <a href="/register" className="text-black font-medium hover:underline">
+            Sign Up
+          </a>
         </p>
-      </form>
+      </div>
+      <ToastContainer />
     </div>
   );
-
 };
