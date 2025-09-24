@@ -8,7 +8,7 @@ import finance from "./images/finance.jpg";
 import writing from "./images/writing.jpg";
 import sales from "./images/sales.jpg";
 import design from "./images/design.jpg";
-import Freelancer from "./images/freelancer.jfif";
+import Freelancer from "./images/freelancer.jpg";
 
 export const HomePage = () => {
   const navigate = useNavigate();
@@ -55,12 +55,12 @@ export const HomePage = () => {
       </h3>
     
     
-  <div className="bg-white text-black px-4 sm:px-6 md:px-16 lg:px-24 py-10">
+  <div className="bg-white text-white px-4 sm:px-6 md:px-16 lg:px-24 py-10">
 
   <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
     
     {/* Card 1 */}
-    <div className="bg-white rounded-lg overflow-hidden text-center p-4 hover:bg-gray-700 transition">
+    <div className="bg-gray-800 rounded-lg overflow-hidden text-center p-4 hover:bg-gray-700 transition">
       <img 
         src={tech} 
         alt="Technology" 
