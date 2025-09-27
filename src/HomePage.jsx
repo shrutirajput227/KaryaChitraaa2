@@ -10,12 +10,14 @@ import writing from "./images/writing.jpg";
 import sales from "./images/sales.jpg";
 import design from "./images/design.jpg";
 import Freelancer from "./images/freelancer.jpg";
+import FreelancerNavbar from "./FreelancerNavbar";
 
 export const HomePage = () => {
   const navigate = useNavigate();
 
   return (
     <div>
+      <FreelancerNavbar />
       <div className="text-white bg-black min-h-screen flex flex-col md:flex-row items-center justify-between px-4 sm:px-6 md:px-16 mt-10 lg:px-24 py-10">
 
         <div className="flex flex-col md:max-w-lg lg:max-w-xl">
@@ -54,63 +56,64 @@ export const HomePage = () => {
           who are ready to support your next project.
         </h3>
 
+    <div className="bg-white text-white px-4 sm:px-6 md:px-16 lg:px-24 py-10">
+  <div className="flex space-x-6 overflow-x-auto scrollbar-hide">
+    <div className="bg-gray-800 rounded-lg overflow-hidden text-center p-4 min-w-[250px] hover:bg-gray-700 transition">
+      <img
+        src={tech}
+        alt="Technology"
+        className="w-full h-40 object-cover rounded-lg mb-3"
+      />
+      <h3 className="text-xl font-semibold">Technical</h3>
+    </div>
 
-        <div className="bg-white text-white px-4 sm:px-6 md:px-16 lg:px-24 py-10">
+    <div className="bg-gray-800 rounded-lg overflow-hidden text-center p-4 min-w-[250px] hover:bg-gray-700 transition">
+      <img
+        src={marketing}
+        alt="Marketing"
+        className="w-full h-40 object-cover rounded-lg mb-3"
+      />
+      <h3 className="text-xl font-semibold">Marketing</h3>
+    </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+    <div className="bg-gray-800 rounded-lg overflow-hidden text-center p-4 min-w-[250px] hover:bg-gray-700 transition">
+      <img
+        src={finance}
+        alt="Finance"
+        className="w-full h-40 object-cover rounded-lg mb-3"
+      />
+      <h3 className="text-xl font-semibold">Finance</h3>
+    </div>
 
-            <div className="bg-gray-800 rounded-lg overflow-hidden text-center p-4 hover:bg-gray-700 transition">
-              <img
-                src={tech}
-                alt="Technology"
-                className="w-full h-40 object-cover rounded-lg mb-3"
-              />
-              <h3 className="text-xl font-semibold">Technical</h3>
-            </div>
+    <div className="bg-gray-800 rounded-lg overflow-hidden text-center p-4 min-w-[250px] hover:bg-gray-700 transition">
+      <img
+        src={writing}
+        alt="Writing"
+        className="w-full h-40 object-cover rounded-lg mb-3"
+      />
+      <h3 className="text-xl font-semibold">Content-Writing</h3>
+    </div>
 
-            <div className="bg-gray-800 rounded-lg overflow-hidden text-center p-4 hover:bg-gray-700 transition">
-              <img
-                src={marketing}
-                alt="Marketing"
-                className="w-full h-40 object-cover rounded-lg mb-3"
-              />
-              <h3 className="text-xl font-semibold">Marketing</h3>
-            </div>
+    <div className="bg-gray-800 rounded-lg overflow-hidden text-center p-4 min-w-[250px] hover:bg-gray-700 transition">
+      <img
+        src={sales}
+        alt="Sales"
+        className="w-full h-40 object-cover rounded-lg mb-3"
+      />
+      <h3 className="text-xl font-semibold">Sales</h3>
+    </div>
 
-            <div className="bg-gray-800 rounded-lg overflow-hidden text-center p-4 hover:bg-gray-700 transition">
-              <img
-                src={finance}
-                alt="Finance"
-                className="w-full h-40 object-cover rounded-lg mb-3"
-              />
-              <h3 className="text-xl font-semibold">Finance</h3>
-            </div>
-            <div className="bg-gray-800 rounded-lg overflow-hidden text-center p-4 hover:bg-gray-700 transition">
-              <img
-                src={writing}
-                alt="writing"
-                className="w-full h-40 object-cover rounded-lg mb-3"
-              />
-              <h3 className="text-xl font-semibold">Content-Writing</h3>
-            </div>
-            <div className="bg-gray-800 rounded-lg overflow-hidden text-center p-4 hover:bg-gray-700 transition">
-              <img
-                src={sales}
-                alt="sales"
-                className="w-full h-40 object-cover rounded-lg mb-3"
-              />
-              <h3 className="text-xl font-semibold">Sales</h3>
-            </div>
-            <div className="bg-gray-800 rounded-lg overflow-hidden text-center p-4 hover:bg-gray-700 transition">
-              <img
-                src={design}
-                alt="design"
-                className="w-full h-40 object-cover rounded-lg mb-3"
-              />
-              <h3 className="text-xl font-semibold">Designing</h3>
-            </div>
-          </div>
-        </div>
+    <div className="bg-gray-800 rounded-lg overflow-hidden text-center p-4 min-w-[250px] hover:bg-gray-700 transition">
+      <img
+        src={design}
+        alt="Design"
+        className="w-full h-40 object-cover rounded-lg mb-3"
+      />
+      <h3 className="text-xl font-semibold">Designing</h3>
+    </div>
+  </div>
+</div>
+    
 
         <div className="w-full flex justify-center mt-0">
           <button

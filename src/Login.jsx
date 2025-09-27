@@ -38,7 +38,7 @@ export const Login = () => {
         const { token, name, role } = result;
 
 
-        localStorage.setItem("Token", token);
+        localStorage.setItem("token", token);
         localStorage.setItem("loggedInUser", name);
         localStorage.setItem("role", role);
 
@@ -46,11 +46,11 @@ export const Login = () => {
 
         setTimeout(() => {
           if (role === "Client") {
-            navigate("/clientDashboard");
+            navigate("/client-home");
           } else if (role === "Freelancer") {
-            navigate("/");
+            navigate("/home");
           } else {
-            navigate("/freelancer-dashboard");
+            navigate("/");
           }
         }, 1000);
       } else {

@@ -1,27 +1,40 @@
-import React, { useState, useEffect } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import React, { useState, useEffect, useRef } from "react";
+import { useNavigate, useLocation, Outlet } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X } from "lucide-react";
 
-export default function Navbar() {
+export default function FreelancerNavbar() {
   const navigate = useNavigate();
   const location = useLocation();
   const [isOpen, setIsOpen] = useState(false);
   const [loggedInUser, setLoggedInUser] = useState("");
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const dropdownRef = useRef(null);
 
   useEffect(() => {
     setLoggedInUser(localStorage.getItem("loggedInUser"));
+  }, [location]);
+
+  // Close dropdown if clicked outside
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+        setDropdownOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
   const handleLogout = () => {
-    localStorage.removeItem("token");
+    localStorage.removeItem("Token");
     localStorage.removeItem("loggedInUser");
-    setLoggedInUser("");
+    localStorage.removeItem("role");
     navigate("/login");
   };
 
   const links = [
-    { name: "Home", path: "/" },
+    { name: "Home", path: "/home" },
     { name: "Jobs", path: "/job" },
     { name: "Support", path: "/support" },
     { name: "About", path: "/about" },
@@ -33,18 +46,20 @@ export default function Navbar() {
         <div className="max-w-7xl mx-5 flex justify-between items-center h-16 px-0">
           <h1
             className="font-bold p-2 m-0 text-3xl text-orange-600 cursor-pointer"
-            onClick={() => navigate("/")}
+            onClick={() => navigate("/home")}
           >
             GigConnect
           </h1>
+
           <div className="hidden md:flex space-x-8 ml-auto mr-6 relative items-center">
             {links.map((link) => (
               <motion.span
                 key={link.name}
-                className={`text-lg font-medium cursor-pointer ${location.pathname === link.path
+                className={`text-lg font-medium cursor-pointer ${
+                  location.pathname === link.path
                     ? "text-orange-600"
                     : "text-white hover:text-orange-600"
-                  }`}
+                }`}
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={() => navigate(link.path)}
@@ -53,19 +68,45 @@ export default function Navbar() {
               </motion.span>
             ))}
 
-            {loggedInUser ? (
-              <div className="flex items-center space-x-4">
-                <span className="text-white font-semibold">
-                  {loggedInUser}
-                </span>
+            {loggedInUser && (
+              <div className="relative" ref={dropdownRef}>
+                // User Avatar Button
                 <button
-                  onClick={handleLogout}
-                  className="px-3 py-1 bg-orange-600 text-white rounded-lg hover:bg-orange-700"
+                  onClick={() => setDropdownOpen(!dropdownOpen)}
+                  className="w-10 h-10 bg-orange-600 rounded-full flex items-center justify-center text-white font-bold text-lg hover:bg-orange-700 transition"
                 >
-                  Logout
+                  {loggedInUser.charAt(0).toUpperCase()}
                 </button>
+
+                // Dropdown
+                {dropdownOpen && (
+                  <motion.div
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -10 }}
+                    className="absolute right-0 mt-2 w-40 bg-white shadow-lg rounded-lg overflow-hidden z-50"
+                  >
+                    <button
+                      onClick={() => {
+                        navigate("/profile"); // My Profile page route
+                        setDropdownOpen(false);
+                      }}
+                      className="block w-full text-left px-4 py-2 hover:bg-gray-100"
+                    >
+                      My Profile
+                    </button>
+                    <button
+                      onClick={handleLogout}
+                      className="block w-full text-left px-4 py-2 hover:bg-gray-100"
+                    >
+                      Logout
+                    </button>
+                  </motion.div>
+                )}
               </div>
-            ) : (
+            )}
+
+            {!loggedInUser && (
               <motion.span
                 className="text-lg font-medium cursor-pointer text-white hover:text-orange-600"
                 whileHover={{ scale: 1.1 }}
@@ -77,6 +118,7 @@ export default function Navbar() {
             )}
           </div>
 
+          //Menu for Mobile
           <button
             className="md:hidden text-white focus:outline-none"
             onClick={() => setIsOpen(!isOpen)}
@@ -85,6 +127,7 @@ export default function Navbar() {
           </button>
         </div>
 
+        //Mobile Menu
         <AnimatePresence>
           {isOpen && (
             <motion.div
@@ -97,10 +140,11 @@ export default function Navbar() {
               {links.map((link) => (
                 <motion.span
                   key={link.name}
-                  className={`text-lg font-medium cursor-pointer ${location.pathname === link.path
+                  className={`text-lg font-medium cursor-pointer ${
+                    location.pathname === link.path
                       ? "text-orange-600"
                       : "text-white hover:text-orange-600"
-                    }`}
+                  }`}
                   whileHover={{ scale: 1.1 }}
                   whileTap={{ scale: 0.95 }}
                   onClick={() => {
@@ -112,11 +156,9 @@ export default function Navbar() {
                 </motion.span>
               ))}
 
-              {loggedInUser ? (
+              {loggedInUser && (
                 <div className="flex flex-col items-center space-y-3">
-                  <span className="text-white font-semibold">
-                    {loggedInUser}
-                  </span>
+                  <span className="text-white font-semibold">{loggedInUser}</span>
                   <button
                     onClick={() => {
                       handleLogout();
@@ -127,23 +169,13 @@ export default function Navbar() {
                     Logout
                   </button>
                 </div>
-              ) : (
-                <motion.span
-                  className="text-lg font-medium cursor-pointer text-white hover:text-orange-600"
-                  whileHover={{ scale: 1.1 }}
-                  whileTap={{ scale: 0.95 }}
-                  onClick={() => {
-                    navigate("/login");
-                    setIsOpen(false);
-                  }}
-                >
-                  Login
-                </motion.span>
               )}
             </motion.div>
           )}
         </AnimatePresence>
       </nav>
+
+      <Outlet />
     </div>
   );
 }
