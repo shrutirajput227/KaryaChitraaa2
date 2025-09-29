@@ -40,6 +40,7 @@ export const Login = () => {
 
         localStorage.setItem("token", token);
         localStorage.setItem("loggedInUser", name);
+        localStorage.setItem("loggedInUserEmail", email); 
         localStorage.setItem("role", role);
 
         handleSuccess("Logged in successfully!");

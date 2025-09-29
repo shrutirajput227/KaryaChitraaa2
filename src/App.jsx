@@ -14,6 +14,8 @@ import PostJob from "./ClientPages/PostJob.jsx";
 import Messages from "./ClientPages/Messages.jsx";
 import Status from "./ClientPages/Status.jsx";
 import ClientLayout from "./ClientLayout.jsx";
+import FreelancerProfile from "./FreelancerProfile.jsx";
+import ClientProfile from "./ClientPages/ClientProfile.jsx";
 
 function App() {
   return (
@@ -28,6 +30,7 @@ function App() {
           <Route path="/about" element={<About />} />
           <Route path="/support" element={<Support />} />
           <Route path="/freelancerChat" element={<FreelancerChat />} />
+          <Route path="/Freelancer-profile" element={<FreelancerProfile />} />
         </Route>
 
         // Client Dashboard Routes
@@ -36,6 +39,7 @@ function App() {
           <Route path="/post-jobs" element={<PostJob />} />
           <Route path="/messages" element={<Messages />} />
           <Route path="/status" element={<Status />} />
+          <Route path="/Client-profile" element={<ClientProfile />} />
         </Route>
 
         // Auth Routes

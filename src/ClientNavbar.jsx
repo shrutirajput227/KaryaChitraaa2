@@ -86,7 +86,7 @@ export default function ClientNavbar() {
                 >
                   <button
                     onClick={() => {
-                      navigate("/profile"); // My Profile page route
+                      navigate("/Client-profile"); // My Profile page route
                       setDropdownOpen(false);
                     }}
                     className="block w-full text-left px-4 py-2 hover:bg-gray-100"
