@@ -1,5 +1,4 @@
-import React, { useEffect } from "react";
-import { useState } from "react";
+import React, { useEffect, useRef } from "react";
 import { FaFacebook, FaInstagram, FaLinkedin, FaTwitter, FaYoutube } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import study from "./images/studying.jpg";
@@ -14,33 +13,53 @@ import FreelancerNavbar from "./FreelancerNavbar";
 
 export const HomePage = () => {
   const navigate = useNavigate();
+  const scrollRef = useRef(null);
+
+  // Auto-scroll cards
+  useEffect(() => {
+    const scrollContainer = scrollRef.current;
+    let scrollAmount = 0;
+    const scrollStep = 1; // pixels per interval
+    const interval = 20; // ms
+
+    const scrollInterval = setInterval(() => {
+      if (scrollContainer) {
+        scrollAmount += scrollStep;
+        if (scrollAmount >= scrollContainer.scrollWidth - scrollContainer.clientWidth) {
+          scrollAmount = 0; // reset to start
+        }
+        scrollContainer.scrollLeft = scrollAmount;
+      }
+    }, interval);
+
+    return () => clearInterval(scrollInterval);
+  }, []);
 
   return (
     <div>
       <FreelancerNavbar />
+      {/* Hero Section */}
       <div className="text-white bg-black min-h-screen flex flex-col md:flex-row items-center justify-between px-4 sm:px-6 md:px-16 mt-10 lg:px-24 py-10">
-
         <div className="flex flex-col md:max-w-lg lg:max-w-xl">
           <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold mb-4 leading-snug">
             Connect.<br />
             Collaborate.<br />
             Get Hired.
           </h2>
-
           <p className="text-gray-300 text-sm sm:text-base md:text-lg lg:text-xl mb-6 leading-relaxed">
             Join a thriving freelance community.<br />
             Sign up or log in to discover top projects,<br />
             connect with clients, and get the support<br />
             when you need to succeed.
           </p>
-
-          <button className="px-5 py-2 sm:px-6 sm:py-3 bg-orange-500 text-white font-semibold rounded-lg 
-          hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-orange-400 transition w-max"
-            onClick={() => navigate("/job")}>
+          <button
+            className="px-5 py-2 sm:px-6 sm:py-3 bg-orange-500 text-white font-semibold rounded-lg 
+            hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-orange-400 transition w-max"
+            onClick={() => navigate("/job")}
+          >
             Find a Job
           </button>
         </div>
-
         <div className="mt-8 md:mt-0 md:ml-8 lg:ml-12 xl:ml-16 flex-shrink-0">
           <img
             src={study}
@@ -49,71 +68,38 @@ export const HomePage = () => {
           />
         </div>
       </div>
+
+      {/* Auto-Scrolling Cards Section */}
       <div className="bg-white">
         <p className="text-black text-sm mt-15 text-center sm:text-base md:text-lg lg:text-xl mb-6 leading-relaxed">
-          Discover top freelance talent on demand.</p>
-        <h3 className="text-center -mt-3">Browse top industries and connect with trusted professionals
+          Discover top freelance talent on demand.
+        </p>
+        <h3 className="text-center -mt-3">
+          Browse top industries and connect with trusted professionals
           who are ready to support your next project.
         </h3>
+        <div className="bg-white text-white px-4 sm:px-6 md:px-16 lg:px-24 py-10">
+          <div
+            ref={scrollRef}
+            className="flex space-x-6 overflow-x-auto scrollbar-hide"
+            style={{ scrollbarWidth: "none", msOverflowStyle: "none" }} // Firefox & IE
+          >
+            {[tech, marketing, finance, writing, sales, design].map((imgSrc, index) => {
+              const titles = ["Technical", "Marketing", "Finance", "Content-Writing", "Sales", "Designing"];
+              return (
+                <div
+                  key={index}
+                  className="bg-gray-800 rounded-lg overflow-hidden text-center p-4 min-w-[250px] hover:bg-gray-700 transition"
+                >
+                  <img src={imgSrc} alt={titles[index]} className="w-full h-40 object-cover rounded-lg mb-3" />
+                  <h3 className="text-xl font-semibold">{titles[index]}</h3>
+                </div>
+              );
+            })}
+          </div>
+        </div>
 
-    <div className="bg-white text-white px-4 sm:px-6 md:px-16 lg:px-24 py-10">
-  <div className="flex space-x-6 overflow-x-auto scrollbar-hide">
-    <div className="bg-gray-800 rounded-lg overflow-hidden text-center p-4 min-w-[250px] hover:bg-gray-700 transition">
-      <img
-        src={tech}
-        alt="Technology"
-        className="w-full h-40 object-cover rounded-lg mb-3"
-      />
-      <h3 className="text-xl font-semibold">Technical</h3>
-    </div>
 
-    <div className="bg-gray-800 rounded-lg overflow-hidden text-center p-4 min-w-[250px] hover:bg-gray-700 transition">
-      <img
-        src={marketing}
-        alt="Marketing"
-        className="w-full h-40 object-cover rounded-lg mb-3"
-      />
-      <h3 className="text-xl font-semibold">Marketing</h3>
-    </div>
-
-    <div className="bg-gray-800 rounded-lg overflow-hidden text-center p-4 min-w-[250px] hover:bg-gray-700 transition">
-      <img
-        src={finance}
-        alt="Finance"
-        className="w-full h-40 object-cover rounded-lg mb-3"
-      />
-      <h3 className="text-xl font-semibold">Finance</h3>
-    </div>
-
-    <div className="bg-gray-800 rounded-lg overflow-hidden text-center p-4 min-w-[250px] hover:bg-gray-700 transition">
-      <img
-        src={writing}
-        alt="Writing"
-        className="w-full h-40 object-cover rounded-lg mb-3"
-      />
-      <h3 className="text-xl font-semibold">Content-Writing</h3>
-    </div>
-
-    <div className="bg-gray-800 rounded-lg overflow-hidden text-center p-4 min-w-[250px] hover:bg-gray-700 transition">
-      <img
-        src={sales}
-        alt="Sales"
-        className="w-full h-40 object-cover rounded-lg mb-3"
-      />
-      <h3 className="text-xl font-semibold">Sales</h3>
-    </div>
-
-    <div className="bg-gray-800 rounded-lg overflow-hidden text-center p-4 min-w-[250px] hover:bg-gray-700 transition">
-      <img
-        src={design}
-        alt="Design"
-        className="w-full h-40 object-cover rounded-lg mb-3"
-      />
-      <h3 className="text-xl font-semibold">Designing</h3>
-    </div>
-  </div>
-</div>
-    
 
         <div className="w-full flex justify-center mt-0">
           <button
@@ -129,6 +115,11 @@ export const HomePage = () => {
           </button>
         </div>
       </div>
+
+      {/* Rest of your page content remains the same... */}
+      {/* Freelancer features, footer, etc. */}
+      {/* Copy the remaining JSX from your existing code here */}
+
 
       <section className="py-12 px-6 bg-gray-100 text-black">
         <h2 className="text-3xl sm:text-4xl font-bold text-center text-gray-800 mb-10">
