@@ -29,7 +29,7 @@ function App() {
           <Route path="/job" element={<Jobs />} />
           <Route path="/about" element={<About />} />
           <Route path="/support" element={<Support />} />
-          <Route path="/freelancerChat" element={<FreelancerChat />} />
+          <Route path="/freelancerChat/:clientId" element={<FreelancerChat />} />
           <Route path="/Freelancer-profile" element={<FreelancerProfile />} />
         </Route>
 
@@ -37,7 +37,8 @@ function App() {
         <Route element={<ClientLayout />} >
           <Route path="/client-home" element={<HomeClient />} />
           <Route path="/post-jobs" element={<PostJob />} />
-          <Route path="/messages" element={<Messages />} />
+          <Route path="/messages/:jobId" element={<Messages />} />
+          <Route path="/messages" element={<p>Please select a job to view applicants</p>} />
           <Route path="/status" element={<Status />} />
           <Route path="/Client-profile" element={<ClientProfile />} />
         </Route>

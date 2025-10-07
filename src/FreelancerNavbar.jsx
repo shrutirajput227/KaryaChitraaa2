@@ -27,7 +27,7 @@ export default function FreelancerNavbar() {
   }, []);
 
   const handleLogout = () => {
-    localStorage.removeItem("Token");
+    localStorage.removeItem("token");
     localStorage.removeItem("loggedInUser");
     localStorage.removeItem("role");
     navigate("/login");
