@@ -6,8 +6,8 @@ export const Jobs = () => {
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState("all");
   const [selectedJob, setSelectedJob] = useState(null);
-  const [appliedJobs, setAppliedJobs] = useState({});
-  const [coverLetterInputs, setCoverLetterInputs] = useState({}); // track inline inputs
+  const [appliedJobs, setAppliedJobs] = useState({}); 
+  const [coverLetterInputs, setCoverLetterInputs] = useState({});
   const navigate = useNavigate();
 
   const token = localStorage.getItem("token");
@@ -29,7 +29,7 @@ export const Jobs = () => {
         const apps = await resApps.json();
         const appliedMap = {};
         apps.forEach(app => {
-          appliedMap[app.job._id] = app.coverLetter;
+          appliedMap[app.job._id] = { coverLetter: app.coverLetter, status: app.status };
         });
         setAppliedJobs(appliedMap);
       }
@@ -60,11 +60,8 @@ export const Jobs = () => {
 
       if (res.status === 403 || !res.ok) { alert(data.message || "Failed to apply"); return; }
 
-      // update appliedJobs state
-      setAppliedJobs(prev => ({ ...prev, [jobId]: coverLetter }));
-      // remove inline input
+      setAppliedJobs(prev => ({ ...prev, [jobId]: { coverLetter, status: "pending" } }));
       setCoverLetterInputs(prev => ({ ...prev, [jobId]: "" }));
-
       alert("Application submitted successfully!");
     } catch (err) {
       console.error(err);
@@ -96,7 +93,7 @@ export const Jobs = () => {
         </div>
       ) : (
         <>
-          {/* Search + Filter */}
+          
           <div className="flex flex-col sm:flex-row gap-4 mb-8">
             <input
               type="text"
@@ -119,10 +116,10 @@ export const Jobs = () => {
             </select>
           </div>
 
-          {/* Jobs Grid */}
+  
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {filteredJobs.length > 0 ? filteredJobs.map(job => {
-              const alreadyApplied = appliedJobs[job._id];
+              const applied = appliedJobs[job._id];
               const inputValue = coverLetterInputs[job._id] || "";
 
               return (
@@ -133,31 +130,37 @@ export const Jobs = () => {
                   <p className="text-sm text-gray-600 capitalize mb-1">Category: {job.category}</p>
                   <p className="text-sm text-gray-500 mb-3">Posted by: {job.createdBy?.name || "Unknown"}</p>
 
-                  {/* Inline cover letter input */}
-                  {!alreadyApplied && user?.role === "Freelancer" && (
-                    <input
-                      type="text"
-                      placeholder="Add your cover letter..."
-                      value={inputValue}
-                      onChange={e => setCoverLetterInputs(prev => ({ ...prev, [job._id]: e.target.value }))}
-                      className="w-full border px-3 py-2 rounded-lg mb-2 focus:outline-none focus:ring-2 focus:ring-orange-400"
-                    />
+                  
+                  {applied ? (
+                    <div className="text-center py-2 font-semibold rounded-full mb-2
+                      capitalize
+                      text-white
+                      transition
+                      bg-yellow-500
+                      {applied.status === 'accepted' && 'bg-green-500'}
+                      {applied.status === 'rejected' && 'bg-red-500'}
+                    ">
+                      {applied.status}
+                    </div>
+                  ) : (
+                    user?.role === "Freelancer" && (
+                      <input
+                        type="text"
+                        placeholder="Add your cover letter..."
+                        value={inputValue}
+                        onChange={e => setCoverLetterInputs(prev => ({ ...prev, [job._id]: e.target.value }))}
+                        className="w-full border px-3 py-2 rounded-lg mb-2 focus:outline-none focus:ring-2 focus:ring-orange-400"
+                      />
+                    )
                   )}
 
                   <div className="flex gap-2">
-                    {user?.id !== job.createdBy?._id.toString() && (
+                    {!applied && user?.id !== job.createdBy?._id.toString() && (
                       <button
                         onClick={() => handleApply(job._id)}
-                        className={`flex-1 py-2 rounded-full transition ${
-                          alreadyApplied
-                            ? "bg-gray-300 text-gray-500 cursor-not-allowed"
-                            : user?.role === "Freelancer"
-                              ? "bg-orange-500 text-white hover:bg-orange-600"
-                              : "bg-gray-300 text-gray-500 cursor-not-allowed"
-                        }`}
-                        disabled={alreadyApplied || user?.role !== "Freelancer"}
+                        className="flex-1 py-2 rounded-full bg-orange-500 text-white hover:bg-orange-600 transition"
                       >
-                        {alreadyApplied ? "Applied" : "Apply"}
+                        Apply
                       </button>
                     )}
                     <button
