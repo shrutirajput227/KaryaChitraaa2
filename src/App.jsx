@@ -2,7 +2,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import FreelancerNavbar from "./FreelancerNavbar.jsx";
 import { Services } from "./Services.jsx";
 import { Jobs } from "./Jobs.jsx";
-import { About } from "./About.jsx";
+import AboutUs from "./About.jsx";
 import { Support } from "./Support.jsx";
 import { Login } from "./Login.jsx";
 import { Register } from "./Register.jsx";
@@ -27,7 +27,7 @@ function App() {
           <Route path="/home" element={<HomePage />} />
           <Route path="/services" element={<Services />} />
           <Route path="/job" element={<Jobs />} />
-          <Route path="/about" element={<About />} />
+          <Route path="/about" element={<AboutUs />} />
           <Route path="/support" element={<Support />} />
           <Route path="/freelancerChat/:clientId" element={<FreelancerChat />} />
            //optional fallback
